@@ -2,10 +2,7 @@ FROM gfpgan:base
 # Thiết lập thư mục làm việc chính
 WORKDIR /app/GFPGAN
 
-COPY . .
-
-# Cài đặt GFPGAN ở chế độ phát triển
-RUN python setup.py develop
+COPY api_gfpgan.py /app/GFPGAN
 
 RUN pip install python-dotenv
 

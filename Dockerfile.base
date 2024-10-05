@@ -19,7 +19,7 @@ RUN pip install --upgrade pip
 RUN pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
 
 # Clone repository GFPGAN
-COPY requirements.txt  /app/GFPGAN/requirements.txt
+COPY . /app/GFPGAN
 
 # Thiết lập thư mục làm việc chính
 WORKDIR /app/GFPGAN
@@ -28,6 +28,9 @@ WORKDIR /app/GFPGAN
 # Cài đặt các phụ thuộc Python
 RUN pip install basicsr facexlib realesrgan
 RUN pip install -r requirements.txt
+
+# Cài đặt GFPGAN ở chế độ phát triển
+RUN python setup.py develop
 
 # Tải mô hình pretrained
 RUN mkdir -p experiments/pretrained_models/
