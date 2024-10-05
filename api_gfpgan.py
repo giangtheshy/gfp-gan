@@ -136,7 +136,7 @@ def restore_images(folder_path):
             print(f'Failed to restore image {img_path}')
 
 # API endpoint that accepts a case_id and processes the corresponding images
-@app.post("/restore")
+@app.post("/restore/{item_id}")
 def restore(case_id: str):
     prefix_path = FOLDER_PATH
     folder_path = os.path.join(prefix_path, case_id)
