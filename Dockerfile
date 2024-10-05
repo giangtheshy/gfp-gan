@@ -2,7 +2,7 @@ FROM gfpgan:base
 # Thiết lập thư mục làm việc chính
 WORKDIR /app/GFPGAN
 
-COPY api_gfpgan.py /app/GFPGAN/api_gfpgan.py
+COPY ./api_gfpgan.py /app/GFPGAN/api_gfpgan.py
 
 RUN pip install python-dotenv
 
