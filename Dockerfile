@@ -2,7 +2,7 @@ FROM gfpgan:base
 # Thiết lập thư mục làm việc chính
 WORKDIR /app/GFPGAN
 
-COPY . /app/GFPGAN
+COPY . .
 
 EXPOSE 8000
 
