@@ -21,6 +21,8 @@ RUN pip install torch torchvision torchaudio --extra-index-url https://download.
 # Clone repository GFPGAN
 COPY requirements.txt  /app/GFPGAN/requirements.txt
 COPY setup.py  /app/GFPGAN/setup.py
+COPY VERSION  /app/GFPGAN/VERSION
+COPY gfpgan  /app/GFPGAN/gfpgan
 
 # Thiết lập thư mục làm việc chính
 WORKDIR /app/GFPGAN
