@@ -23,6 +23,7 @@ COPY requirements.txt  /app/GFPGAN/requirements.txt
 COPY setup.py  /app/GFPGAN/setup.py
 COPY VERSION  /app/GFPGAN/VERSION
 COPY gfpgan  /app/GFPGAN/gfpgan
+COPY README.md  /app/GFPGAN/README.md
 
 # Thiết lập thư mục làm việc chính
 WORKDIR /app/GFPGAN
