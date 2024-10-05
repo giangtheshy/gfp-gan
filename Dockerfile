@@ -7,6 +7,8 @@ COPY . .
 # Cài đặt GFPGAN ở chế độ phát triển
 RUN python setup.py develop
 
+RUN pip install python-dotenv
+
 EXPOSE 8000
 
 # Run the application using Uvicorn
