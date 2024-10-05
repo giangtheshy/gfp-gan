@@ -35,7 +35,10 @@ RUN python setup.py develop
 RUN mkdir -p experiments/pretrained_models/
 RUN wget https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth -P experiments/pretrained_models/
 RUN sed -i 's/from torchvision.transforms.functional_tensor import rgb_to_grayscale/from torchvision.transforms.functional import rgb_to_grayscale/' /usr/local/lib/python3.10/dist-packages/basicsr/data/degradations.py
-COPY checkcuda.py checkcuda.py
 # CMD ["python", "checkcuda.py"]
 # Định nghĩa lệnh chạy mặc định
-ENTRYPOINT ["python", "inference_gfpgan.py", "-i", "images", "-o", "outputs", "-v", "1.3", "-s", "2"]
+# ENTRYPOINT ["python", "inference_gfpgan.py", "-i", "images", "-o", "outputs", "-v", "1.3", "-s", "2"]
+EXPOSE 8000
+
+# Run the application using Uvicorn
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]

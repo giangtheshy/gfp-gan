@@ -8,6 +8,8 @@ services:
       - ./images:/app/GFPGAN/images
       - ./outputs:/app/GFPGAN/outputs
       - ./faces:/app/GFPGAN/faces
+    ports:
+      - "8005:8000"
     deploy:
       resources:
         reservations:
