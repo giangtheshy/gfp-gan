@@ -12,3 +12,4 @@ tqdm
 yapf
 fastapi
 uvicorn
+python-dotenv

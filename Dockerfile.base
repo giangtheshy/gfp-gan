@@ -1,8 +1,4 @@
-# Sử dụng image CUDA 11.8 với cuDNN 8 cho Ubuntu 22.04
-FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu22.04
-
-# Thiết lập thư mục làm việc
-WORKDIR /app/GFPGAN
+FROM nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
 
 # Cài đặt các phụ thuộc hệ thống và thiết lập liên kết cho python3.10
 RUN apt-get update && apt-get install -y \
@@ -18,30 +14,26 @@ RUN apt-get update && apt-get install -y \
     && ln -s /usr/bin/python3.10 /usr/bin/python \
     && rm -rf /var/lib/apt/lists/*
 
-# Cài đặt pip và nâng cấp pip
+# Cài đặt pip và các gói Python
 RUN pip install --upgrade pip
-
-# Cài đặt torch, torchvision, torchaudio với CUDA 11.8
-RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 
+RUN pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
 
 # Clone repository GFPGAN
-RUN git clone https://github.com/TencentARC/GFPGAN.git .
+COPY requirements.txt  /app/GFPGAN/requirements.txt
+COPY setup.py  /app/GFPGAN/setup.py
 
 # Thiết lập thư mục làm việc chính
 WORKDIR /app/GFPGAN
+
+
+# Cài đặt GFPGAN ở chế độ phát triển
+RUN python setup.py develop
 
 # Cài đặt các phụ thuộc Python
 RUN pip install basicsr facexlib realesrgan
 RUN pip install -r requirements.txt
 
-# Cài đặt GFPGAN ở chế độ phát triển
-RUN python setup.py develop
-
 # Tải mô hình pretrained
 RUN mkdir -p experiments/pretrained_models/
 RUN wget https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth -P experiments/pretrained_models/
 RUN sed -i 's/from torchvision.transforms.functional_tensor import rgb_to_grayscale/from torchvision.transforms.functional import rgb_to_grayscale/' /usr/local/lib/python3.10/dist-packages/basicsr/data/degradations.py
-
-# Định nghĩa lệnh chạy mặc định
-ENTRYPOINT ["python", "inference_gfpgan.py", "-i", "images", "-o", "outputs", "-v", "1.3", "-s", "2"]
-
