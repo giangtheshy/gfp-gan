@@ -1,13 +1,14 @@
 services:
   gfpgan:
     image: gfpgan_inference
+    container_name: gfpgan
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - ./images:/app/GFPGAN/images
       - ./outputs:/app/GFPGAN/outputs
-      - ./faces:/app/GFPGAN/faces
+      - /home/poc4a5000/detect/detect/faces:/app/GFPGAN/faces
     ports:
       - "8005:8000"
     deploy:
