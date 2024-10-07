@@ -8,6 +8,8 @@ import os
 import torch
 import warnings
 
+from pydantic import BaseModel
+
 from basicsr.utils import imwrite
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from gfpgan import GFPGANer
@@ -17,6 +19,7 @@ app = FastAPI()
 
 
 FOLDER_PATH = os.getenv("FOLDER_PATH")
+MOUNT_PATH = os.getenv("MOUNT_PATH")
 # Global variables
 restorer = None
 
@@ -135,6 +138,35 @@ def restore_images(folder_path):
         else:
             print(f'Failed to restore image {img_path}')
 
+# Pydantic model for request body
+class FilePath(BaseModel):
+    file_path: str
+
+# Function to restore a single image
+def restore_single_image(path):
+    # Read the image
+    input_img = cv2.imread(path, cv2.IMREAD_COLOR)
+    if input_img is None:
+        return {"error": f"Failed to read image {path}"}
+
+    # Restore the image
+    try:
+        _, _, restored_img = restorer.enhance(
+            input_img,
+            has_aligned=False,
+            only_center_face=False,
+            paste_back=True,
+            weight=0.5)
+    except Exception as e:
+        return {"error": f"Failed to restore image {path}. Error: {str(e)}"}
+
+    # Overwrite the original image with the restored image
+    if restored_img is not None:
+        imwrite(restored_img, path)
+        return {"message": f"Image {path} has been restored"}
+    else:
+        return {"error": f"Failed to restore image {path}"}
+
 # API endpoint that accepts a case_id and processes the corresponding images
 @app.post("/restore/{case_id}")
 def restore(case_id: str):
@@ -148,6 +180,19 @@ def restore(case_id: str):
     restore_images(folder_path)
 
     return {"message": f"Images in folder {folder_path} have been restored"}
+
+# New API endpoint that accepts a file_path and processes the image
+@app.post("/restore-file")
+def restore_file(file_path: FilePath):
+    path = file_path.file_path
+    local_path = path.replace(MOUNT_PATH, FOLDER_PATH)
+
+    if not os.path.exists(local_path):
+        return {"error": f"File {local_path} does not exist"}
+
+    # Call the restore_single_image function
+    result = restore_single_image(local_path)
+    return result
 
 # Initialize the restorer when the application starts
 @app.on_event("startup")
