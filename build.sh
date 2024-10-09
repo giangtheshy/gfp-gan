@@ -1,6 +1,8 @@
-python3.8 -m venv venv
+# python3.8 -m venv venv
 
-source venv/bin/activate
+# source venv/bin/activate
+
+which python
 
 pip install --upgrade pip
 
