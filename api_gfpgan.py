@@ -185,7 +185,10 @@ def restore(case_id: str):
 @app.post("/restore-file")
 def restore_file(file_path: FilePath):
     path = file_path.file_path
-    local_path = path.replace(MOUNT_PATH, FOLDER_PATH)
+    if MOUNT_PATH !="" and MOUNT_PATH:
+      local_path = path.replace(MOUNT_PATH, FOLDER_PATH)
+    else:
+      local_path = path
 
     if not os.path.exists(local_path):
         return {"error": f"File {local_path} does not exist"}
