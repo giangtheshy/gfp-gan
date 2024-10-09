@@ -1,18 +1,15 @@
 # python3.8 -m venv venv
 
-# source venv/bin/activate
 
-which python
+./venv/bin/pip install --upgrade pip
 
-pip install --upgrade pip
+./venv/bin/pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
 
-pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
+./venv/bin/pip install -r requirements.txt
 
-pip install -r requirements.txt
+./venv/bin/pip install basicsr facexlib realesrgan
 
-pip install basicsr facexlib realesrgan
-
-python setup.py develop
+./venv/bin/python setup.py develop
 
 mkdir -p experiments/pretrained_models/
 
