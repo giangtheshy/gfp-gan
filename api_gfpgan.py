@@ -28,7 +28,7 @@ def initialize_restorer():
     global restorer
 
     # Default parameters (can be adjusted as needed)
-    version = '1.3'  # GFPGAN model version
+    version = '1.4'  # GFPGAN model version
     upscale = 2      # Upscaling factor
     bg_upsampler_name = 'realesrgan'  # Background upsampler
     bg_tile = 400    # Tile size for background upsampler
